@@ -3,7 +3,7 @@ const electron = require('electron');
 const app = electron.app;
 // Module to create native browser window.
 const BrowserWindow = electron.BrowserWindow;
-
+const isDev = require('electron-is-dev');
 const path = require('path');
 const url = require('url');
 
@@ -13,7 +13,11 @@ let mainWindow;
 
 function createWindow() {
     // Create the browser window.
-    mainWindow = new BrowserWindow({width: 800, height: 600});
+    if (isDev) {
+      mainWindow = new BrowserWindow({width: 500, height: 260});
+    } else {
+      mainWindow = new BrowserWindow({width: 500, height: 260, webPreferences: {devTools:false}});
+    }
 
     // and load the index.html of the app.
     const startUrl = process.env.ELECTRON_START_URL || url.format({
@@ -23,7 +27,9 @@ function createWindow() {
         });
     mainWindow.loadURL(startUrl);
     // Open the DevTools.
-    mainWindow.webContents.openDevTools();
+    if (isDev) {
+      mainWindow.webContents.openDevTools();
+    }
 
     // Emitted when the window is closed.
     mainWindow.on('closed', function () {
