@@ -10,12 +10,21 @@ const elews = require('./js/websockets.js')
 // const ipcRenderer  = electron.ipcRenderer;
 
 class App extends Component {
+  constructor() {
+    super();
+    this.state = {
+      fonts: []
+    }
+    this.onMessage = this.onMessage.bind(this)
+  }
+
   componentDidMount() {
     elews.connect(this.openedSocket,this.closedSocket,this.onMessage)
   }
 
   openedSocket(ev) {
     console.log("connection opened")
+    elews.send(JSON.stringify({version: 1, type: elews.GETFONT, message: "", status: elews.STATUSOK}))
   }
   closedSocket(ev) {
     console.log("connection closed")
@@ -23,7 +32,14 @@ class App extends Component {
 
   onMessage(ev) {
     var m = JSON.parse(ev.data)
+
+    if (m.type===elews.GETFONT && m.status === elews.STATUSOK) {
+      this.setState({fonts: m.fonts})
+      console.log(m.fonts)
+    }
+
     console.log(m)
+    console.log(elews.status(m.status) + " " , elews.type(m.type))
   }
 
   render() {
@@ -31,7 +47,7 @@ class App extends Component {
       <div className="App">
         <TabNav>
           <SelectFont status="danger" caption="Select Font" onClick={this.openDialog}/>
-          <InstalledFonts initialFontList={this.fetchFonts()}/>
+          <InstalledFonts fonts={this.state.fonts}/>
         </TabNav>
       </div>
     );

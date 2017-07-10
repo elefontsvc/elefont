@@ -17,22 +17,28 @@ export class SelectFont extends Component {
 }
 
 export class InstalledFonts extends Component {
+  trimExt(name) {
+    return name.split(".")[0]
+  }
+  trimName(name) {
+    return name.split(".")[1].toUpperCase()
+  }
   render() {
     return (
       <Table>
         <thead>
-          <tr>
+          <tr className="installed-fonts-headers">
             <th>Font</th>
+            <th>Type</th>
             <th>Uninstall</th>
           </tr>
         </thead>
         <tbody>
-          {[...this.props.initialFontList].map((x,i) =>
-            <tr key={i}>
-              <td>{x}</td>
-              <td>
-                <Button bsStyle="danger" bsSize="xsmall"><Glyphicon glyph="trash"/></Button>
-              </td>
+          {this.props.fonts.map(item =>
+            <tr key={item.id}>
+              <td>{this.trimExt(item.name)}</td>
+              <td>{this.trimName(item.name)}</td>
+              <td><Button bsStyle="danger" bsSize="xsmall"><Glyphicon glyph="trash"/></Button></td>
             </tr>
           )}
         </tbody>
