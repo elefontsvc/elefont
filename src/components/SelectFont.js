@@ -8,7 +8,7 @@ export class SelectFont extends Component {
   // }
   render() {
     return (
-      <Button className="pad-top" bsStyle={this.props.status} onClick={this.props.onClick}>
+      <Button className="button-pad" bsStyle={this.props.status} onClick={this.props.onClick}>
         <Glyphicon glyph="folder-open" className="pad-right"/>
         {this.props.caption}
       </Button>
@@ -38,7 +38,7 @@ export class InstalledFonts extends Component {
             <tr key={item.id}>
               <td>{this.trimExt(item.name)}</td>
               <td>{this.trimName(item.name)}</td>
-              <td><Button bsStyle="danger" bsSize="xsmall"><Glyphicon glyph="trash"/></Button></td>
+              <td><Button key={item.id} bsStyle="danger" bsSize="xsmall" onClick={this.props.onClick.bind(this,item.id)}><Glyphicon glyph="trash"/></Button></td>
             </tr>
           )}
         </tbody>

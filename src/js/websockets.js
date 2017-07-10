@@ -15,9 +15,13 @@ var ws = (function () {
   const statusVals = [[STATUSOK,"STATUS_OK"],[STATUSWAIT,"STATUS_WAIT"],[STATUSFAILED,"STATUS_FAILED"]]
   const statusMap = new Map(statusVals)
 
+  const bootstrapAlertVals = [[STATUSOK,"success"],[STATUSWAIT,"warning"],[STATUSFAILED,"danger"]]
+  const bootstrapMap = new Map(bootstrapAlertVals)
+
   let lws
   function _connect(openCallback, closeCallback, messageCallback) {
-    lws = new WebSocket("ws://192.168.1.121:42135/ws")
+    // lws = new WebSocket("ws://192.168.1.121:42135/ws")
+    lws = new WebSocket("ws://localhost:42135/ws")
     lws.onopen = function(ev) {
       openCallback(ev)
     }
@@ -38,11 +42,16 @@ var ws = (function () {
     return typeMap.get(nbr)
   }
 
+  function _bootstrap(nbr) {
+    return bootstrapMap.get(nbr)
+  }
+
   return {
     connect: _connect,
     send: _send,
     status: _status,
     type: _type,
+    bootstrap: _bootstrap,
     ADDFONT: ADDFONT,
     DELFONT: DELFONT,
     GETFONT: GETFONT,
